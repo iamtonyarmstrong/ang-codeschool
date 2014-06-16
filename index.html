@@ -22,33 +22,55 @@
                     </li>
                 </ul>
             </section>
-            <section ng-init="1">
+            <section ng-controller="PanelController as panel">
                 <ul class="nav nav-pills">
-                    <li ng-class="{ active:tab===1 }">
-                        <a href="" ng-click="tab=1">Description</a>
+                    <li ng-class="{ active:panel.isSelected(1) }">
+                        <a href="" ng-click="panel.selectTab(1)">Description</a>
                     </li>
-                    <li ng-class="{ active:tab===2 }">
-                        <a href="" ng-click="tab=2">Specification</a>
+                    <li ng-class="{ active:panel.isSelected(2) }">
+                        <a href="" ng-click="panel.selectTab(2)">Specification</a>
                     </li>
-                    <li ng-class="{ active:tab===3 }">
-                        <a href="" ng-click="tab=3">Reviews</a>
+                    <li ng-class="{ active:panel.isSelected(3) }">
+                        <a href="" ng-click="panel.selectTab(3)">Reviews</a>
                     </li>
                 </ul>
 
-                <div class="panel" ng-show="tab===1">
+                <div class="panel" ng-show="panel.isSelected(1)">
                     <h4>Description</h4>
                     <p>{{product.description}}</p>
                 </div>
-                <div class="panel"  ng-show="tab===2">
+                <div class="panel"  ng-show="panel.isSelected(2)">
                     <h4>Specifications</h4>
                     <p>Coming Soon...</p>
                 </div>
-                <div class="panel"  ng-show="tab===3">
-                    <h4>Reviews</h4>
-                    <p>Coming Soon...</p>
+                <div class="panel" ng-show="panel.isSelected(3)">
+                    <blockquote ng-repeat="review in product.reviews">
+                    <br>{{review.body}}
+                    <h5>Stars: {{review.stars}}</h5>
+                    <p> - {{review.author}}</p>
+                    </blockquote>
+                
+                    <form name="reviewForm" ng-controller="ReviewController as reviewCtrl" ng-submit="reviewCtrl.addReview(product)">
+                        <blockquote>
+                            <br>{{reviewCtrl.review.body}}
+                            <h5>Stars: {{reviewCtrl.review.stars}}</h5>
+                            <p> - {{reviewCtrl.review.author}}</p>
+                        </blockquote>                    
+                        <select ng-model="reviewCtrl.review.stars">
+                            <option value="5">5</option>
+                            <option value="4">4</option>
+                            <option value="3">3</option>
+                            <option value="2">2</option>
+                            <option value="1">1</option>
+                        </select>
+                        <textarea ng-model="reviewCtrl.review.body"></textarea>
+                        <label>By:</label>
+                        <input ng-model="reviewCtrl.review.author" type="email"/>
+                        <input type="submit" value="Submit" />
+                    </form> 
                 </div>                                 
             </section>
-            {{tab}}
+            {{panel.whichTab()}}
         </div>
 
 
